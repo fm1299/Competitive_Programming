@@ -1,23 +1,43 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 int main()
 {
-    std::vector<int> Jack;
     int n, m;
-    std::cin >> n >> m;
-    int counter = 0;
-    int val1;
-    int val2;
-    for (int i = 0; i < n; i++)
+    while (std::cin >> n >> m, (n || m))
     {
-        std::cin >> val1;
-        Jack.push_back(val1);
+        int counter = 0;
+        std::vector<int> Jack;
+        std::vector<int> Jill;
+        for (int i = 0; i < n; i++)
+        {
+            int val1;
+            std::cin >> val1;
+            Jack.push_back(val1);
+        }
+        std::vector<int>::iterator it = Jack.begin();
+        for (int i = 0; i < m; i++)
+        {
+            int cd;
+            std::cin >> cd;
+            while (it != Jack.end())
+            {
+                if (*it < cd)
+                {
+                    it++;
+                }
+                else if (*it == cd)
+                {
+                    counter++;
+                    it++;
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        std::cout << counter << std::endl;
     }
-    for (int j = 0; j < m; j++)
-    {
-        std::cin >> val2;
-    }
-    Jack.clear();
-    std::cin >> n >> m;
-    std::cout << counter << std::endl;
 }
