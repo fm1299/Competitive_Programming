@@ -1,53 +1,99 @@
-#include <iostream>
-#include <list>
-#include <vector>
-#include <string>
-void init_list(int n, std::list<std::vector<int>> &l)
+#include <bits/stdc++.h>
+#define ll long long int
+#define vll vector<ll>
+#define vb vector<bool>
+using namespace std;
+
+vll parent;
+vll suma;
+vll sp;
+ll n, m;
+
+void ini()
 {
-    for (int i = 1; i <= n; i++)
+    for (ll i = 1; i <= n; ++i)
     {
-        l.push_back(std::vector<int>{i});
+        parent[i] = n + i;
+        parent[n + i] = n + i;
+        suma[n + i] = i;
+        suma[i] = i;
+        sp[i] = 1;
+        sp[n + i] = 1;
     }
 }
-void operation1(int p, int q)
+
+ll par(ll a)
 {
-}
-void operation2()
-{
-}
-void operation3()
-{
-}
-int main()
-{
-    std::list<std::vector<int>> test;
-    std::list<std::vector<int>>::iterator it = test.begin();
-    int n, m;
-    while (scanf("%d %d", &n, &m) == 2)
+    while (parent[a] != a)
     {
-        init_list(n, test);
-        std::string commands;
-        int c = 0;
-        for (int i = 1; i <= m; i++)
+        parent[a] = parent[parent[a]];
+        a = parent[a];
+    }
+    return a;
+}
+
+void Union(ll p, ll q)
+{
+    ll a = par(p);
+    ll b = par(q);
+    if (a == b)
+        return;
+    suma[b] += suma[a];
+    sp[b] += sp[a];
+    parent[a] = b;
+}
+
+void Move(ll p, ll q)
+{
+    ll a = par(p);
+    ll b = par(q);
+    if (a == b)
+        return;
+    suma[a] -= p;
+    suma[b] += p;
+    sp[a]--;
+    sp[b]++;
+    parent[p] = b;
+}
+
+void solve()
+{
+    while (cin >> n >> m)
+    {
+        parent.resize(2 * n + 1);
+        suma.resize(2 * n + 1);
+        sp.resize(2 * n + 1);
+        ini();
+        while (m--)
         {
-            std::getline(std::cin, commands);
-            c = std::count(commands.begin(), commands.end(), ' ');
-            std::remove(commands.begin(), commands.end(), ' ');
-            commands.resize(commands.length() - 2);
-            int value = commands[0] - '0';
-            if (value == 1)
+            int op;
+            cin >> op;
+            if (op == 1)
             {
-                operation1(commands[1] - '0', commands[2] - '0');
+                ll a, b;
+                cin >> a >> b;
+                Union(a, b);
             }
-            else if (value == 2)
+            else if (op == 2)
             {
-                operation2();
+                ll a, b;
+                cin >> a >> b;
+                Move(a, b);
             }
-            else if (value == 3)
+            else
             {
-                operation3();
+                ll a;
+                cin >> a;
+                cout << sp[par(a)] << ' ' << suma[par(a)] << '\n';
             }
         }
     }
-    return 0;
+}
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    solve();
 }
