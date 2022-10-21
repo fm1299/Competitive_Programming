@@ -1,58 +1,50 @@
 #include <iostream>
-int get_sum(long long int *&tree, long long int index)
-{
-    long long int sum = 0;
-    index += 1;
-    while (index > 0)
-    {
-        sum += tree[--index];
-        index -= index & (-index);
-    }
-    return sum;
-}
-void index_increment(long long int *&tree, int n, long long int index, long long int value)
-{
-    index = index + 1;
-    while (index <= n)
-    {
+#include <vector>
 
+using namespace std;
+void update(std::vector<long long> &tree, long long index, long long value, long long n)
+{
+    index++;
+    while (index < n + 5)
+    {
         tree[index] += value;
-
         index += index & (-index);
     }
 }
-void init(long long int *&tree, int n)
+
+long long sum(std::vector<long long> &tree, long long index)
 {
-    tree = new long long int[n + 1];
-    for (int i = 1; i <= n; i++)
+    long long total = tree[0];
+    while (index > 0)
     {
-        tree[i] = 0;
+        total += tree[index];
+        index -= index & (-index);
     }
+    return total;
 }
+
 int main()
 {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(NULL);
-    std::cout.tie(NULL);
-    long long int n, n_operations;
-    std::cin >> n >> n_operations;
-    long long int *fTree;
-    init(fTree, n);
-    char op;
-    int num1 = 0, num2 = 0;
-    for (long long int i = 0; i < n_operations; i++)
+    ios::sync_with_stdio(false);
+    long long n, q;
+    std::vector<long long> fenwick(5000005, 0);
+    scanf("%lld%lld\n", &n, &q);
+
+    long long index, value;
+    for (long long i = 0; i < q; i++)
     {
-        std::cin >> op;
+        char op;
+        scanf("%c", &op);
+
         if (op == '+')
         {
-            std::cin >> num1 >> num2;
-            index_increment(fTree, n, num1, num2);
+            scanf("%lld%lld\n", &index, &value);
+            update(fenwick, index, value, n);
         }
-        else if (op == '?')
+        if (op == '?')
         {
-            std::cin >> num1;
-            std::cout << get_sum(fTree, num1) << std::endl;
+            scanf("%lld\n", &index);
+            printf("%lld\n", sum(fenwick, index));
         }
     }
-    return 0;
 }
