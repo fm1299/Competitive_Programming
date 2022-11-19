@@ -53,8 +53,11 @@ int rsq(int k, int i, int j)
     return rsq(k, j) - rsq(k, i - 1);
 }
 
-void solve()
+int main()
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
     cin >> n >> m;
     for (int i = 1; i <= 6; ++i)
         cin >> gems[i];
@@ -87,18 +90,8 @@ void solve()
             cin >> l >> r;
             ll sum = 0;
             for (int i = 1; i <= 6; ++i)
-            {
                 sum += rsq(i, l, r) * gems[i];
-            }
-            cout << sum << endl;
+            cout << sum << '\n';
         }
     }
-}
-
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-    solve();
 }
